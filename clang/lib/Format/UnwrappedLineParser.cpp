@@ -2532,8 +2532,6 @@ bool UnwrappedLineParser::parseEnum() {
   if (FormatTok->Tok.is(tok::kw_enum))
     nextToken();
 
-  const FormatToken &InitialToken = *FormatTok;
-
   // In TypeScript, "enum" can also be used as property name, e.g. in interface
   // declarations. An "enum" keyword followed by a colon would be a syntax
   // error and thus assume it is just an identifier.
@@ -2580,8 +2578,7 @@ bool UnwrappedLineParser::parseEnum() {
     return true;
   }
 
-  if (!Style.AllowShortEnumsOnASingleLine &&
-      ShouldBreakBeforeBrace(Style, InitialToken))
+  if (!Style.AllowShortEnumsOnASingleLine)
     addUnwrappedLine();
   // Parse enum body.
   nextToken();

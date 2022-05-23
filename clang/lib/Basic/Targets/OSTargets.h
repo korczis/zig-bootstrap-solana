@@ -461,8 +461,10 @@ protected:
     if (this->HasFloat128)
       Builder.defineMacro("__FLOAT128__");
 
-    if (Opts.C11)
+    if (Opts.C11) {
+      Builder.defineMacro("__STDC_NO_ATOMICS__");
       Builder.defineMacro("__STDC_NO_THREADS__");
+    }
   }
 
 public:

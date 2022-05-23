@@ -243,10 +243,7 @@ static void defineXLCompatMacros(MacroBuilder &Builder) {
 void PPCTargetInfo::getTargetDefines(const LangOptions &Opts,
                                      MacroBuilder &Builder) const {
 
-  // We define the XLC compatibility macros only on AIX and Linux since XLC
-  // was never available on any other platforms.
-  if (getTriple().isOSAIX() || getTriple().isOSLinux())
-    defineXLCompatMacros(Builder);
+  defineXLCompatMacros(Builder);
 
   // Target identification.
   Builder.defineMacro("__ppc__");

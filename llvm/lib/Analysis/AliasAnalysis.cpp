@@ -697,16 +697,14 @@ ModRefInfo AAResults::getModRefInfo(const Instruction *I,
   case Instruction::AtomicRMW:
     return getModRefInfo((const AtomicRMWInst *)I, Loc, AAQIP);
   case Instruction::Call:
-  case Instruction::CallBr:
+    return getModRefInfo((const CallInst *)I, Loc, AAQIP);
   case Instruction::Invoke:
-    return getModRefInfo((const CallBase *)I, Loc, AAQIP);
+    return getModRefInfo((const InvokeInst *)I, Loc, AAQIP);
   case Instruction::CatchPad:
     return getModRefInfo((const CatchPadInst *)I, Loc, AAQIP);
   case Instruction::CatchRet:
     return getModRefInfo((const CatchReturnInst *)I, Loc, AAQIP);
   default:
-    assert(!I->mayReadOrWriteMemory() &&
-           "Unhandled memory access instruction!");
     return ModRefInfo::NoModRef;
   }
 }

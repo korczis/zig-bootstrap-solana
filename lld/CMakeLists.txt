@@ -184,7 +184,6 @@ endif()
 include_directories(BEFORE
   ${CMAKE_CURRENT_BINARY_DIR}/include
   ${CMAKE_CURRENT_SOURCE_DIR}/include
-  ${CMAKE_CURRENT_SOURCE_DIR}/../zig/lib/libunwind/include
   )
 
 if (NOT LLVM_INSTALL_TOOLCHAIN_ONLY)
@@ -193,6 +192,19 @@ if (NOT LLVM_INSTALL_TOOLCHAIN_ONLY)
     FILES_MATCHING
     PATTERN "*.h"
     )
+endif()
+
+if (MSVC)
+  FOREACH(flag
+      CMAKE_C_FLAGS_RELEASE CMAKE_C_FLAGS_RELWITHDEBINFO
+      CMAKE_C_FLAGS_DEBUG CMAKE_C_FLAGS_DEBUG_INIT
+      CMAKE_CXX_FLAGS_RELEASE  CMAKE_CXX_FLAGS_RELWITHDEBINFO
+      CMAKE_CXX_FLAGS_DEBUG  CMAKE_CXX_FLAGS_DEBUG_INIT)
+      if (MSVC)
+          STRING(REPLACE "/MD"  "/MT" "${flag}" "${${flag}}")
+          SET("${flag}" "${${flag}}")
+      endif (MSVC)
+  ENDFOREACH()
 endif()
 
 add_subdirectory(Common)
@@ -204,6 +216,7 @@ if (LLVM_INCLUDE_TESTS)
   add_subdirectory(unittests)
 endif()
 
+add_subdirectory(docs)
 add_subdirectory(COFF)
 add_subdirectory(ELF)
 add_subdirectory(MachO)

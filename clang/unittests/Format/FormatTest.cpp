@@ -2451,14 +2451,6 @@ TEST_F(FormatTest, ShortEnums) {
   Style.AllowShortEnumsOnASingleLine = true;
   verifyFormat("enum { A, B, C } ShortEnum1, ShortEnum2;", Style);
   Style.AllowShortEnumsOnASingleLine = false;
-  verifyFormat("enum {\n"
-               "  A,\n"
-               "  B,\n"
-               "  C\n"
-               "} ShortEnum1, ShortEnum2;",
-               Style);
-  Style.BreakBeforeBraces = FormatStyle::BS_Custom;
-  Style.BraceWrapping.AfterEnum = true;
   verifyFormat("enum\n"
                "{\n"
                "  A,\n"
@@ -17784,25 +17776,13 @@ TEST_F(FormatTest, CatchAlignArrayOfStructuresRightAlignment) {
 TEST_F(FormatTest, CatchAlignArrayOfStructuresLeftAlignment) {
   auto Style = getLLVMStyle();
   Style.AlignArrayOfStructures = FormatStyle::AIAS_Left;
-  /* FIXME: This case gets misformatted.
-  verifyFormat("auto foo = Items{\n"
-               "    Section{0, bar(), },\n"
-               "    Section{1, boo()  }\n"
-               "};\n",
-               Style);
-  */
-  verifyFormat("auto foo = Items{\n"
-               "    Section{\n"
-               "            0, bar(),\n"
-               "            }\n"
-               "};\n",
-               Style);
   verifyFormat("struct test demo[] = {\n"
                "    {56, 23,    \"hello\"},\n"
                "    {-1, 93463, \"world\"},\n"
                "    {7,  5,     \"!!\"   }\n"
                "};\n",
                Style);
+
   verifyFormat("struct test demo[] = {\n"
                "    {56, 23,    \"hello\"}, // first line\n"
                "    {-1, 93463, \"world\"}, // second line\n"
@@ -22225,7 +22205,8 @@ TEST_F(FormatTest, IndentAccessModifiers) {
                Style);
   // Enumerations are not records and should be unaffected.
   Style.AllowShortEnumsOnASingleLine = false;
-  verifyFormat("enum class E {\n"
+  verifyFormat("enum class E\n"
+               "{\n"
                "  A,\n"
                "  B\n"
                "};\n",

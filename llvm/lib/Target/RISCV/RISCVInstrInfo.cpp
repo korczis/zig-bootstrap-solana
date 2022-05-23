@@ -999,7 +999,7 @@ bool RISCVInstrInfo::isFunctionSafeToOutlineFrom(
 bool RISCVInstrInfo::isMBBSafeToOutlineFrom(MachineBasicBlock &MBB,
                                             unsigned &Flags) const {
   // More accurate safety checking is done in getOutliningCandidateInfo.
-  return TargetInstrInfo::isMBBSafeToOutlineFrom(MBB, Flags);
+  return true;
 }
 
 // Enum values indicating how an outlined call should be constructed.

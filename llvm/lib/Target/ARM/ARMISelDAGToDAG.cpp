@@ -79,10 +79,6 @@ public:
 
   void Select(SDNode *N) override;
 
-  /// Return true as some complex patterns, like those that call
-  /// canExtractShiftFromMul can modify the DAG inplace.
-  bool ComplexPatternFuncMutatesDAG() const override { return true; }
-
   bool hasNoVMLxHazardUse(SDNode *N) const;
   bool isShifterOpProfitable(const SDValue &Shift,
                              ARM_AM::ShiftOpc ShOpcVal, unsigned ShAmt);
