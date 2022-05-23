@@ -23,6 +23,7 @@ static const ZigLLVM_ArchType arch_list[] = {
     ZigLLVM_avr,            // AVR: Atmel AVR microcontroller
     ZigLLVM_bpfel,          // eBPF or extended BPF or 64-bit BPF (little endian)
     ZigLLVM_bpfeb,          // eBPF or extended BPF or 64-bit BPF (big endian)
+    ZigLLVM_sbf,	    // Solana dialect of eBPF (little-endian)
     ZigLLVM_csky,           // CSKY: csky
     ZigLLVM_hexagon,        // Hexagon: hexagon
     ZigLLVM_m68k,           // M68k: Motorola 680x0 family
@@ -536,6 +537,7 @@ uint32_t target_arch_pointer_bit_width(ZigLLVM_ArchType arch) {
         case ZigLLVM_amdgcn:
         case ZigLLVM_bpfel:
         case ZigLLVM_bpfeb:
+        case ZigLLVM_sbf:
         case ZigLLVM_le64:
         case ZigLLVM_mips64:
         case ZigLLVM_mips64el:
@@ -604,6 +606,7 @@ uint32_t target_arch_largest_atomic_bits(ZigLLVM_ArchType arch) {
         case ZigLLVM_amdgcn:
         case ZigLLVM_bpfel:
         case ZigLLVM_bpfeb:
+        case ZigLLVM_sbf:
         case ZigLLVM_le64:
         case ZigLLVM_mips64:
         case ZigLLVM_mips64el:
@@ -825,6 +828,7 @@ const char *arch_stack_pointer_register_name(ZigLLVM_ArchType arch) {
         case ZigLLVM_avr:
         case ZigLLVM_bpfeb:
         case ZigLLVM_bpfel:
+        case ZigLLVM_sbf:
         case ZigLLVM_csky:
         case ZigLLVM_hexagon:
         case ZigLLVM_lanai:
@@ -879,6 +883,7 @@ bool target_is_arm(const ZigTarget *target) {
         case ZigLLVM_avr:
         case ZigLLVM_bpfeb:
         case ZigLLVM_bpfel:
+        case ZigLLVM_sbf:
         case ZigLLVM_csky:
         case ZigLLVM_hexagon:
         case ZigLLVM_m68k:
@@ -941,7 +946,7 @@ bool target_is_wasm(const ZigTarget *target) {
 }
 
 bool target_is_bpf(const ZigTarget *target) {
-    return target->arch == ZigLLVM_bpfel || target->arch == ZigLLVM_bpfeb;
+    return target->arch == ZigLLVM_bpfel || target->arch == ZigLLVM_bpfeb || target->arch == ZigLLVM_sbf;
 }
 
 ZigLLVM_EnvironmentType target_default_abi(ZigLLVM_ArchType arch, Os os) {
