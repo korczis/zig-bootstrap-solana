@@ -1,0 +1,57 @@
+#!/bin/sh
+
+set -e
+
+ROOTDIR="$(pwd)"
+ZIG_VERSION="0.10.0-dev.2073+59905a62f"
+
+mkdir -p "$ROOTDIR/out/build-llvm-host"
+
+pushd "$ROOTDIR/out/build-llvm-host"
+cmake "$ROOTDIR/llvm" \
+  -GNinja \
+  -DLLVM_ENABLE_PROJECTS="lld;clang" \
+  -DLLVM_ENABLE_LIBXML2=OFF \
+  -DCMAKE_INSTALL_PREFIX="$ROOTDIR/out/host" \
+  -DCMAKE_PREFIX_PATH="$ROOTDIR/out/host" \
+  -DLLVM_INCLUDE_TESTS=OFF \
+  -DLLVM_INCLUDE_GO_TESTS=OFF \
+  -DLLVM_INCLUDE_EXAMPLES=OFF \
+  -DLLVM_INCLUDE_BENCHMARKS=OFF \
+  -DLLVM_ENABLE_BINDINGS=OFF \
+  -DLLVM_ENABLE_OCAMLDOC=OFF \
+  -DLLVM_ENABLE_Z3_SOLVER=OFF \
+  -DCLANG_BUILD_TOOLS=OFF \
+  -DCLANG_INCLUDE_DOCS=OFF \
+  -DLLVM_INCLUDE_DOCS=OFF \
+  -DCMAKE_BUILD_TYPE=Release
+ninja install
+popd
+
+mkdir -p "$ROOTDIR/out/build-zlib-host"
+
+pushd "$ROOTDIR/out/build-zlib-host"
+cmake "$ROOTDIR/zlib" \
+  -GNinja \
+  -DCMAKE_INSTALL_PREFIX="$ROOTDIR/out/host" \
+  -DCMAKE_PREFIX_PATH="$ROOTDIR/out/host" \
+  -DCMAKE_BUILD_TYPE=Release \
+  -DCMAKE_AR="$ROOTDIR/out/host/bin/llvm-ar" \
+  -DCMAKE_RANLIB="$ROOTDIR/out/host/bin/llvm-ranlib"
+ninja install
+popd
+
+mkdir -p "$ROOTDIR/out/build-zig-host"
+
+pushd "$ROOTDIR/out/build-zig-host"
+cmake "$ROOTDIR/zig" \
+  -GNinja \
+  -DCMAKE_INSTALL_PREFIX="$ROOTDIR/out/host" \
+  -DCMAKE_PREFIX_PATH="$ROOTDIR/out/host" \
+  -DZIG_VERSION="$ZIG_VERSION"
+  # -DCMAKE_BUILD_TYPE=Release \
+ninja install
+popd
+
+
+
