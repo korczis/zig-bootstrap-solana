@@ -1,0 +1,32 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - master
+      - '*/*'
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Cache packages
+        uses: actions/cache@v3
+        with:
+          path: ${{ github.workspace }}/out
+          key: out
+
+      - uses: seanmiddleditch/gha-setup-ninja@master
+
+      - name: Build host
+        run: /bin/bash ./build-host
+
+
+
+
