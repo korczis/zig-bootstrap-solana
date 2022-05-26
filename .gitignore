@@ -1,2 +1,17 @@
-out/
-zig-cache
+# IDE specific
+.idea/
+.vscode/
+
+# project specific
+/out/
+/tmp/
+
+# zig specific
+zig-cache/
+zig-out/
+
+/release/
+/debug/
+/build/
+/build-*/
+/docgen_tmp/

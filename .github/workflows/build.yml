@@ -9,23 +9,45 @@ on:
     branches:
       - master
 
+env:
+  CMAKE_C_COMPILER_LAUNCHER: ccache
+  CMAKE_CXX_COMPILER_LAUNCHER: ccache
+  CMAKE_BUILD_TYPE: Release
+  CCACHE_COMPRESS: true
+  CCACHE_COMPRESSLEVEL: 6
+  CCACHE_MAXSIZE: 2048M
+
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+
+#    env:
+#      CCACHE_BASEDIR: ${{ github.workspace }}
+#      CCACHE_DIR: ${{ github.workspace }}/.ccache
+
     steps:
       - uses: actions/checkout@v3
 
-      - name: Cache packages
-        uses: actions/cache@v3
-        with:
-          path: ${{ github.workspace }}/out
-          key: out
+      - name: Get latest CMake and ninja
+        uses: lukka/get-cmake@latest
 
-      - uses: seanmiddleditch/gha-setup-ninja@master
+      - name: ccache
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          key: "ccache"
+          max-size: "2048M"
+
+#      - name: Cache packages
+#        uses: actions/cache@v3
+#        with:
+#          path: ${{ env.CCACHE_DIR}}
+#          key: "ccache"
 
       - name: Build host
-        run: /bin/bash ./build-host
+        run:  |
+          export PATH="/usr/lib/ccache:/usr/local/opt/ccache/libexec:$PATH"
+          /bin/bash ./build-host
 
 
 
